@@ -1,6 +1,6 @@
 # 🎯 UI Autotests — Auction Platform
 
-Проект создан в учебных целях и может быть использован для внутреннего пользования и тестирования команды Акатосфера.
+Проект может быть использован для внутреннего пользования и тестирования команды Акатосфера.
 
 Автоматизированные UI-тесты для тестового сайта аукциона.
 
@@ -32,6 +32,17 @@ pip install -r requirements.txt
 playwright install
 python auth/save_auth.py
 python run_auth_tests.py
+```
+
+---
+
+## 📥 Клонирование проекта
+
+Склонировать репозиторий:
+
+```bash
+git clone https://github.com/imidg1825/auction-frontend-ui-autotests.git
+cd auction-frontend-ui-autotests
 ```
 
 ---
