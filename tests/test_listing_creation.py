@@ -8,6 +8,7 @@ import re
 import time
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -88,6 +89,8 @@ def _ensure_location_for_submit(page) -> None:
         pytest.skip("Не удалось указать местоположение для размещения.")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_create_listing_button_opens_flow_not_login_modal(page):
     """«Создать объявление» ведёт в сценарий создания, а не в окно входа."""
     _open_create_listing_from_home(page)
@@ -99,6 +102,8 @@ def test_create_listing_button_opens_flow_not_login_modal(page):
     ).to_be_visible(timeout=30_000)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_create_listing_opens_category_or_first_step(page):
     """Открывается шаг выбора категории («Новое объявление» / «Выбрать категорию»)."""
     _open_category_step(page)
@@ -113,6 +118,8 @@ def test_create_listing_opens_category_or_first_step(page):
     expect(page).to_have_url(re.compile(r".*createAd"), timeout=15_000)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_category_step_shows_root_categories(page):
     """На шаге выбора видны корневые категории."""
     _open_category_step(page)
@@ -122,6 +129,8 @@ def test_category_step_shows_root_categories(page):
     expect(page.get_by_text("Животные", exact=True).nth(1)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_selecting_leaf_category_opens_listing_form(page):
     """После выбора категории открывается форма объявления."""
     _open_filled_listing_form(page)
@@ -129,6 +138,8 @@ def test_selecting_leaf_category_opens_listing_form(page):
     expect(page.get_by_text("Разместить объявление", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_listing_form_has_title_field(page):
     """Поле «Название товара»."""
     _open_filled_listing_form(page)
@@ -139,6 +150,8 @@ def test_listing_form_has_title_field(page):
     expect(title).to_have_value("Тестовое название")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_listing_form_has_description_field(page):
     """Поле описания («Описание товара»)."""
     _open_filled_listing_form(page)
@@ -149,6 +162,8 @@ def test_listing_form_has_description_field(page):
     expect(desc).to_have_value("Тестовое описание")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_listing_form_has_photo_upload_block(page):
     """Блок загрузки фото."""
     _open_filled_listing_form(page)
@@ -157,6 +172,8 @@ def test_listing_form_has_photo_upload_block(page):
     expect(page.locator('input[type="file"]')).to_be_attached()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_listing_form_has_fixed_price_and_auction_options(page):
     """Переключение типа: фиксированная цена и аукцион."""
     _open_filled_listing_form(page)
@@ -166,6 +183,8 @@ def test_listing_form_has_fixed_price_and_auction_options(page):
     expect(main.get_by_text("Аукцион", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_fixed_price_mode_shows_price_field(page):
     """В режиме фиксированной цены есть поле «Цена»."""
     _open_filled_listing_form(page)
@@ -176,6 +195,8 @@ def test_fixed_price_mode_shows_price_field(page):
     expect(price).to_have_value("1000")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_auction_mode_shows_start_price_and_duration(page):
     """В режиме аукциона — «Стартовая цена» и «Продолжительность аукциона»."""
     _open_filled_listing_form(page)
@@ -187,6 +208,8 @@ def test_auction_mode_shows_start_price_and_duration(page):
     expect(main.get_by_text("Продолжительность аукциона", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_listing_form_has_location_field(page):
     """Поле местоположения."""
     _open_filled_listing_form(page)
@@ -194,6 +217,8 @@ def test_listing_form_has_location_field(page):
     expect(page.get_by_label("Местоположение", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Listing Creation")
 def test_publish_fixed_price_listing_end_to_end_when_possible(page, tmp_path):
     """
     Полный сценарий: форма → фото → цена → «Разместить объявление» → результат на стенде.

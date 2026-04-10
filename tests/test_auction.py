@@ -5,6 +5,7 @@
 import re
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -33,6 +34,8 @@ def _auction_card_link(page):
     return page.locator('[class*="Card"]').locator('a[href^="/auction/"]')
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auction")
 def test_skip_when_page_is_fixed_price_product(page):
     """Объявление по /product/ — не аукцион, проверки ставок не выполняются."""
     page.goto("/product/911", wait_until="domcontentloaded", timeout=120_000)
@@ -60,6 +63,8 @@ def _open_first_auction_from_home(page):
     expect(page).to_have_url(re.compile(r".*/auction/"), timeout=60_000)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auction")
 def test_auction_page_shows_current_stake_time_and_bid_cta(page):
     """Аукцион: текущая ставка/ставки, время до окончания, кнопка «Сделать ставку»."""
     _open_first_auction_from_home(page)
@@ -72,6 +77,8 @@ def test_auction_page_shows_current_stake_time_and_bid_cta(page):
     expect(page.get_by_role("button", name="Сделать ставку")).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auction")
 def test_auction_bid_dialog_accepts_amount_and_enables_confirm(page):
     """Ввод суммы в модалке ставки активирует «Подтвердить ставку»."""
     _open_first_auction_from_home(page)

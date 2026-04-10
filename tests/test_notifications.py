@@ -7,6 +7,7 @@
 import re
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -58,23 +59,31 @@ def _notification_target_links(page):
     )
 
 
+@allure.epic("UI Auction")
+@allure.feature("Notifications")
 def test_notifications_opens_from_profile_menu(page):
     """Раздел «Уведомления» открывается из меню профиля."""
     _open_notifications_from_profile_menu(page)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Notifications")
 def test_notifications_url(page):
     """URL соответствует разделу уведомлений."""
     _open_notifications_from_profile_menu(page)
     expect(page).to_have_url(NOTIFICATIONS_PATH)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Notifications")
 def test_notifications_page_shows_section_marker(page):
     """На странице явно виден раздел уведомлений (заголовок)."""
     _open_notifications_from_profile_menu(page)
     expect(_notifications_heading(page)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Notifications")
 def test_notifications_list_cards_or_empty_state(page):
     """
     Либо есть элементы со ссылками на товар/аукцион,
@@ -101,6 +110,8 @@ def test_notifications_list_cards_or_empty_state(page):
         expect(targets).to_have_count(0)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Notifications")
 def test_notifications_click_opens_target_when_available(page):
     """Клик по уведомлению ведёт на страницу объявления или аукциона."""
     _open_notifications_from_profile_menu(page)

@@ -6,6 +6,7 @@
 
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -43,6 +44,8 @@ def _open_profile_drawer_mobile(page):
     )
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_authenticated_user_sees_profile_link_in_header(page):
     """В шапке есть вход в профиль (ссылка с аватаром «И»), а не кнопка «Войти»."""
     page.set_viewport_size(VIEWPORT_DESKTOP)
@@ -54,6 +57,8 @@ def test_authenticated_user_sees_profile_link_in_header(page):
     expect(page.get_by_role("button", name="Войти")).not_to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_profile_avatar_opens_menu_with_sections(page):
     """Клик по аватару (моб.) открывает список разделов личного кабинета."""
     _open_profile_drawer_mobile(page)
@@ -63,6 +68,8 @@ def test_profile_avatar_opens_menu_with_sections(page):
     expect(page.get_by_role("link", name="Уведомления")).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_profile_menu_lists_main_cabinet_sections(page):
     """В меню есть основные разделы (как в UI стенда)."""
     _open_profile_drawer_mobile(page)
@@ -73,6 +80,8 @@ def test_profile_menu_lists_main_cabinet_sections(page):
     expect(page.get_by_text("Выход", exact=True)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_navigate_to_my_ads_section(page):
     """Раздел «Мои объявления» открывается."""
     page.set_viewport_size(VIEWPORT_DESKTOP)
@@ -85,6 +94,8 @@ def test_navigate_to_my_ads_section(page):
     expect(main.get_by_text("Зарегистрирован", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_navigate_to_favorites_section(page):
     """Раздел «Избранное» открывается."""
     page.set_viewport_size(VIEWPORT_DESKTOP)
@@ -97,6 +108,8 @@ def test_navigate_to_favorites_section(page):
     ).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_navigate_to_settings_section(page):
     """Раздел «Настройки» открывается."""
     page.set_viewport_size(VIEWPORT_DESKTOP)
@@ -107,6 +120,8 @@ def test_navigate_to_settings_section(page):
     expect(page.locator("main").get_by_text("Личные данные", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_logout_from_profile_menu(page):
     """Выход из аккаунта из мобильного меню профиля."""
     _open_profile_drawer_mobile(page)
@@ -116,6 +131,8 @@ def test_logout_from_profile_menu(page):
     expect(page.locator('header a[href="/profile/myAds"]')).to_have_count(0)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile")
 def test_after_logout_sign_in_button_visible_on_desktop(page):
     """После выхода на десктопной ширине снова видна кнопка «Войти»."""
     _open_profile_drawer_mobile(page)

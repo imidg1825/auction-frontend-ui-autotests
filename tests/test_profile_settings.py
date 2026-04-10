@@ -7,6 +7,7 @@
 import re
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -52,17 +53,23 @@ def _settings_main(page):
     return page.locator("main")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_opens_from_profile_menu(page):
     """Раздел «Настройки» открывается из меню профиля."""
     _open_settings_from_profile_menu(page)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_url(page):
     """URL соответствует разделу настроек."""
     _open_settings_from_profile_menu(page)
     expect(page).to_have_url(SETTINGS_PATH)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_page_shows_section_marker(page):
     """На странице виден раздел настроек или блок личных данных."""
     _open_settings_from_profile_menu(page)
@@ -71,6 +78,8 @@ def test_settings_page_shows_section_marker(page):
     expect(main.get_by_role("heading", name=re.compile(r"Настр"))).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_profile_fields_visible(page):
     """Поля профиля отображаются (имя, фамилия, e-mail, телефон)."""
     _open_settings_from_profile_menu(page)
@@ -82,6 +91,8 @@ def test_settings_profile_fields_visible(page):
         expect(main.get_by_label(label, exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_can_edit_field_when_enabled(page):
     """Если поле доступно для ввода, значение можно изменить."""
     _open_settings_from_profile_menu(page)
@@ -96,6 +107,8 @@ def test_settings_can_edit_field_when_enabled(page):
     expect(first).to_have_value(original + suffix)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_save_button_enables_after_change_when_present(page):
     """Если есть кнопка сохранения, после изменения данных она становится активной."""
     _open_settings_from_profile_menu(page)
@@ -117,6 +130,8 @@ def test_settings_save_button_enables_after_change_when_present(page):
     expect(save.first).to_be_enabled()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_save_without_error_when_available(page):
     """После сохранения нет явной ошибки в интерфейсе (если сценарий доступен)."""
     _open_settings_from_profile_menu(page)
@@ -159,6 +174,8 @@ def test_settings_save_without_error_when_available(page):
         page.wait_for_timeout(3000)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Profile Settings")
 def test_settings_validation_on_email_when_editable(page):
     """Проверка валидации формата e-mail, если поле редактируемое."""
     _open_settings_from_profile_menu(page)

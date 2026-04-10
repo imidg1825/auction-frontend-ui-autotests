@@ -1,6 +1,7 @@
 import re
 import uuid
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -28,6 +29,8 @@ def _auth_dialog(page):
     return dlg
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_sign_in_opens_modal_with_login_and_registration(guest_page):
     """По «Войти» открывается поп-ап входа с переходом к регистрации."""
     _open_login_modal(guest_page)
@@ -36,6 +39,8 @@ def test_sign_in_opens_modal_with_login_and_registration(guest_page):
     expect(dlg.get_by_text("Зарегистрироваться", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_login_email_field_accepts_value(guest_page):
     """Поле e-mail на шаге входа принимает введённое значение."""
     _open_login_modal(guest_page)
@@ -46,6 +51,8 @@ def test_login_email_field_accepts_value(guest_page):
     expect(email).to_have_value(value)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_login_continue_button_enables_for_valid_email_only(guest_page):
     """Некорректный e-mail оставляет «Продолжить» неактивной; корректный — активирует."""
     _open_login_modal(guest_page)
@@ -61,6 +68,8 @@ def test_login_continue_button_enables_for_valid_email_only(guest_page):
     expect(btn).to_be_enabled()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_login_continue_opens_code_verification_screen(guest_page):
     """После «Продолжить» показывается экран ввода одноразового кода."""
     _open_login_modal(guest_page)
@@ -72,6 +81,8 @@ def test_login_continue_opens_code_verification_screen(guest_page):
     expect(dlg.get_by_placeholder("Введите код")).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_code_field_accepts_digit_input(guest_page):
     """Поле кода принимает ввод цифр (без проверки корректности кода)."""
     _open_login_modal(guest_page)
@@ -85,6 +96,8 @@ def test_code_field_accepts_digit_input(guest_page):
     expect(code_input).to_have_value("12345")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 @pytest.mark.skip(reason="Нужен реальный код из письма; экран «Персональные данные» после него здесь не проверяем.")
 def test_after_valid_code_personal_data_screen_opens(guest_page):
     """После верного кода должен открыться экран персональных данных (требует OTP)."""
@@ -100,6 +113,8 @@ def _open_registration_personal_data_form(page):
     return dlg
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_registration_name_and_phone_fields_are_editable(guest_page):
     """На форме регистрации доступны поля имени и телефона."""
     dlg = _open_registration_personal_data_form(guest_page)
@@ -112,6 +127,8 @@ def test_registration_name_and_phone_fields_are_editable(guest_page):
     expect(phone).to_have_value(re.compile(r"\+7 \(900\) 123 45 67"))
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_registration_consent_can_be_checked(guest_page):
     """Чекбокс согласия с условиями можно установить."""
     dlg = _open_registration_personal_data_form(guest_page)
@@ -119,6 +136,8 @@ def test_registration_consent_can_be_checked(guest_page):
     expect(dlg.locator('input[type="checkbox"]')).to_be_checked()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Auth")
 def test_registration_save_button_enabled_when_form_valid(guest_page):
     """При заполненных данных и согласии кнопка «Сохранить» активна."""
     dlg = _open_registration_personal_data_form(guest_page)

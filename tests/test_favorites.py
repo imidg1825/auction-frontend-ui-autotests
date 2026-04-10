@@ -4,6 +4,7 @@
 
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -31,6 +32,8 @@ def _open_favorites_page(page):
     _dismiss_cookie_banner_if_visible(page)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Favorites")
 def test_authenticated_user_can_open_favorites_section(page):
     """Авторизованный пользователь может открыть раздел «Избранное»."""
     _open_favorites_page(page)
@@ -38,6 +41,8 @@ def test_authenticated_user_can_open_favorites_section(page):
     expect(page.locator("main")).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Favorites")
 def test_favorites_page_loads_successfully(page):
     """Страница «Избранное» загружается без ошибки (контент профиля на месте)."""
     _open_favorites_page(page)
@@ -45,6 +50,8 @@ def test_favorites_page_loads_successfully(page):
     expect(page.locator("main").get_by_text("Зарегистрирован", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Favorites")
 def test_favorites_page_shows_section_heading(page):
     """На странице виден заголовок раздела «Избранное»."""
     _open_favorites_page(page)
@@ -54,6 +61,8 @@ def test_favorites_page_shows_section_heading(page):
     ).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Favorites")
 def test_favorites_url_is_profile_favorites(page):
     """URL соответствует разделу favorites."""
     _open_favorites_page(page)
@@ -61,6 +70,8 @@ def test_favorites_url_is_profile_favorites(page):
     expect(page).to_have_url("https://front.test.kp.ktsf.ru/profile/favorites")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Favorites")
 def test_favorites_shows_cards_when_has_listings(page):
     """Если в избранном есть объявления — они показываются карточками."""
     _open_favorites_page(page)
@@ -72,6 +83,8 @@ def test_favorites_shows_cards_when_has_listings(page):
     expect(cards.first).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Favorites")
 def test_favorites_empty_state_when_no_listings(page):
     """Если избранное пустое — нет карточек объявлений под разделом."""
     _open_favorites_page(page)
@@ -87,6 +100,8 @@ def test_favorites_empty_state_when_no_listings(page):
     expect(main.get_by_text("Аукционы", exact=True)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Favorites")
 def test_open_favorites_from_profile_menu(page):
     """Переход в «Избранное» из мобильного меню профиля."""
     page.set_viewport_size(VIEWPORT_MOBILE)

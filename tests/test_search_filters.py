@@ -5,6 +5,7 @@
 import re
 import time
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -121,12 +122,16 @@ def _expect_listing_cards_min_or_skip(page, min_count: int, visible_timeout_ms: 
         )
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
 def test_home_has_search_field(page):
     """На главной есть поле поиска."""
     _open_home(page)
     expect(_header_search_input(page)).to_be_visible(timeout=60_000)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
 def test_search_field_accepts_text(page):
     """В поле поиска можно ввести текст."""
     _open_home(page)
@@ -135,6 +140,9 @@ def test_search_field_accepts_text(page):
     expect(inp).to_have_value("iphone")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Поиск через кнопку")
 def test_search_opens_results_via_find_button(page):
     """По кнопке «Найти» открывается выдача с карточками."""
     _open_home(page)
@@ -142,6 +150,9 @@ def test_search_opens_results_via_find_button(page):
     _expect_listing_cards_min_or_skip(page, 1)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Поиск через Enter")
 def test_search_via_enter_key(page):
     """По Enter в поле поиска тоже открывается выдача."""
     _open_home(page)
@@ -149,6 +160,9 @@ def test_search_via_enter_key(page):
     _expect_listing_cards_min_or_skip(page, 1)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Отображение карточек")
 def test_search_results_show_listing_cards(page):
     """В выдаче отображаются карточки объявлений."""
     _open_home(page)
@@ -156,6 +170,9 @@ def test_search_results_show_listing_cards(page):
     _expect_listing_cards_min_or_skip(page, 2)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Открытие карточки")
 def test_search_result_card_opens_product_or_auction(page):
     """Клик по карточке из выдачи открывает страницу объявления."""
     _open_home(page)
@@ -172,6 +189,9 @@ def test_search_result_card_opens_product_or_auction(page):
     )
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Открытие категорий")
 def test_all_categories_opens(page):
     """Кнопка «Все категории» открывает блок с категориями."""
     _open_home(page)
@@ -184,6 +204,9 @@ def test_all_categories_opens(page):
         expect(personal.first).to_be_visible(timeout=20_000)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Фильтр по категории")
 def test_selecting_category_updates_listing(page):
     """Выбор категории меняет выдачу на главной."""
     _open_home(page)
@@ -207,6 +230,9 @@ def test_selecting_category_updates_listing(page):
     assert titles_before != titles_after or "Животные" in page.locator("main").inner_text()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Применение фильтров")
 def test_filters_change_results_if_present(page):
     """Если на выдаче есть переключатель Объявления/Аукционы — смена типа меняет список."""
     _open_home(page)
@@ -237,6 +263,9 @@ def test_filters_change_results_if_present(page):
         )
 
 
+@allure.epic("UI Auction")
+@allure.feature("Search")
+@allure.story("Пустой результат поиска")
 def test_search_no_matches_shows_empty_or_no_cards(page):
     """Случайная строка без совпадений — пустая выдача или явное сообщение."""
     _open_home(page)

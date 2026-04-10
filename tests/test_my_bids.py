@@ -7,6 +7,7 @@
 import re
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -57,23 +58,31 @@ def _auction_lot_links(page):
     return page.locator("main").locator('a[href*="/auction/"]')
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Bids")
 def test_my_bids_opens_from_profile_menu(page):
     """Раздел «Мои ставки» открывается из меню профиля."""
     _open_my_bids_from_profile_menu(page)
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Bids")
 def test_my_bids_url(page):
     """URL соответствует разделу моих ставок."""
     _open_my_bids_from_profile_menu(page)
     expect(page).to_have_url(MY_BIDS_PATH)
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Bids")
 def test_my_bids_page_shows_section_marker(page):
     """На странице явно виден раздел «Мои ставки»."""
     _open_my_bids_from_profile_menu(page)
     expect(_my_bids_heading(page)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Bids")
 def test_my_bids_list_or_empty_state(page):
     """
     Либо есть ссылки на аукционы в списке ставок,
@@ -99,6 +108,8 @@ def test_my_bids_list_or_empty_state(page):
         expect(lots).to_have_count(0)
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Bids")
 def test_my_bids_tabs_when_present(page):
     """Переключатели «Активные» / «Завершённые» отображаются, если есть в разметке."""
     _open_my_bids_from_profile_menu(page)
@@ -113,6 +124,8 @@ def test_my_bids_tabs_when_present(page):
     expect(done_btn.first).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Bids")
 def test_my_bids_open_auction_when_link_available(page):
     """Переход по ставке открывает страницу аукциона."""
     _open_my_bids_from_profile_menu(page)

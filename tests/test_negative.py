@@ -5,6 +5,7 @@
 import re
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -86,6 +87,8 @@ def _auction_card_link(page):
     return page.locator('[class*="Card"]').locator('a[href^="/auction/"]')
 
 
+@allure.epic("UI Auction")
+@allure.feature("Negative Scenarios")
 def test_login_invalid_email_disables_continue_and_shows_hint(page):
     """Некорректный e-mail: «Продолжить» неактивна и показывается сообщение о формате."""
     _open_login_modal(page)
@@ -98,6 +101,8 @@ def test_login_invalid_email_disables_continue_and_shows_hint(page):
     expect(dlg.get_by_text("Неверный формат", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Negative Scenarios")
 def test_login_empty_email_disables_continue(page):
     """Пустой e-mail не активирует «Продолжить»."""
     _open_login_modal(page)
@@ -112,6 +117,8 @@ def test_login_empty_email_disables_continue(page):
     expect(btn).to_be_disabled()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Negative Scenarios")
 @pytest.mark.skipif(
     not STATE_JSON.is_file(),
     reason="Нет auth/state.json — сценарий создания объявления недоступен.",
@@ -123,6 +130,8 @@ def test_create_listing_submit_disabled_when_required_fields_empty(page):
     expect(submit).to_be_disabled()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Negative Scenarios")
 @pytest.mark.skipif(
     not STATE_JSON.is_file(),
     reason="Нет auth/state.json — сценарий создания объявления недоступен.",
@@ -158,6 +167,8 @@ def test_create_listing_invalid_or_empty_price_keeps_submit_disabled(page, tmp_p
     expect(submit).to_be_enabled()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Negative Scenarios")
 @pytest.mark.skipif(
     not STATE_JSON.is_file(),
     reason="Нет auth/state.json — сценарий создания объявления недоступен.",
@@ -196,6 +207,8 @@ def test_create_auction_invalid_or_empty_start_price_keeps_submit_disabled(page,
     expect(submit).to_be_enabled()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Negative Scenarios")
 @pytest.mark.skipif(
     not STATE_JSON.is_file(),
     reason="Нет auth/state.json — модалка ставки недоступна.",
@@ -230,6 +243,8 @@ def test_auction_bid_empty_amount_disables_confirm(page):
     expect(amount).to_have_value("")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Negative Scenarios")
 @pytest.mark.skipif(
     not STATE_JSON.is_file(),
     reason="Нет auth/state.json — модалка ставки недоступна.",

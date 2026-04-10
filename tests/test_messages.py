@@ -8,8 +8,11 @@ import re
 import time
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
+
+from utils.auth_helpers import require_authenticated
 
 STATE_JSON = Path(__file__).resolve().parent.parent / "auth" / "state.json"
 
@@ -118,6 +121,7 @@ def _open_messages_from_profile_menu(page):
     # Дождаться оболочки главной: иначе клик по аватару часто ловит timeout.
     expect(page.get_by_placeholder("Поиск по объявлениям")).to_be_visible(timeout=60_000)
 
+    require_authenticated(page)
     _require_authenticated_header_or_skip(page)
 
     opener = _wait_profile_menu_trigger(page)
@@ -267,23 +271,35 @@ def _active_composer_for_text_input_or_skip(page):
     pytest.skip("Нет диалогов с активным полем ввода")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Messages")
+@allure.story("Открытие раздела сообщений")
 def test_messages_opens_from_profile_menu(page):
     """Раздел «Сообщения» открывается из меню профиля."""
     _open_messages_from_profile_menu(page)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Messages")
+@allure.story("Переход по URL сообщений")
 def test_messages_list_url(page):
     """URL соответствует разделу сообщений."""
     _open_messages_from_profile_menu(page)
     expect(page).to_have_url(MESSAGES_PATH)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Messages")
+@allure.story("Отображение заголовка")
 def test_messages_page_shows_section_heading(page):
     """На странице явно виден раздел сообщений (заголовок)."""
     _open_messages_from_profile_menu(page)
     expect(_messages_main_heading(page)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Messages")
+@allure.story("Список сообщений или пустое состояние")
 def test_messages_list_or_empty_state(page):
     """
     Либо виден список диалогов (ссылки на /profile/messages/:id),
@@ -304,6 +320,9 @@ def test_messages_list_or_empty_state(page):
         expect(conv).to_have_count(0)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Messages")
+@allure.story("Открытие диалога")
 def test_messages_open_conversation_when_available(page):
     """Клик по диалогу открывает переписку."""
     _open_messages_from_profile_menu(page)
@@ -315,6 +334,9 @@ def test_messages_open_conversation_when_available(page):
     expect(page).to_have_url(MESSAGES_CHAT_PATH, timeout=30_000)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Messages")
+@allure.story("Ввод текста сообщения")
 def test_messages_composer_accepts_text_when_available(page):
     """Поле ввода сообщения принимает текст."""
     _open_messages_from_profile_menu(page)
@@ -323,6 +345,9 @@ def test_messages_composer_accepts_text_when_available(page):
     expect(inp).to_have_value("тест ui playwright")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Messages")
+@allure.story("Запрет отправки пустого сообщения")
 def test_messages_empty_text_blocks_send_when_available(page):
     """
     Пустое сообщение не должно появиться в переписке.

@@ -7,6 +7,7 @@
 import re
 from pathlib import Path
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -60,23 +61,31 @@ def _listing_links(page):
     )
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Ads")
 def test_my_ads_opens_from_profile_menu(page):
     """Раздел «Мои объявления» открывается из меню профиля."""
     _open_my_ads_from_profile_menu(page)
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Ads")
 def test_my_ads_url(page):
     """URL соответствует разделу моих объявлений."""
     _open_my_ads_from_profile_menu(page)
     expect(page).to_have_url(MY_ADS_PATH)
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Ads")
 def test_my_ads_page_shows_section_marker(page):
     """На странице явно виден раздел «Мои объявления»."""
     _open_my_ads_from_profile_menu(page)
     expect(_my_ads_heading(page)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Ads")
 def test_my_ads_list_cards_or_empty_state(page):
     """Либо список/карточки объявлений, либо пустое состояние / их отсутствие."""
     _open_my_ads_from_profile_menu(page)
@@ -103,6 +112,8 @@ def test_my_ads_list_cards_or_empty_state(page):
         expect(links).to_have_count(0)
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Ads")
 def test_my_ads_tabs_when_present(page):
     """Переключатели «Объявления / Аукционы» и статусы отображаются, если есть в разметке."""
     _open_my_ads_from_profile_menu(page)
@@ -131,6 +142,8 @@ def test_my_ads_tabs_when_present(page):
         expect(arch_tab.first).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("My Ads")
 def test_my_ads_open_listing_when_link_available(page):
     """Переход по объявлению из раздела открывает страницу товара или аукциона."""
     _open_my_ads_from_profile_menu(page)

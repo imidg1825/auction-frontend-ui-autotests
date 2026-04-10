@@ -4,6 +4,7 @@
 
 import re
 
+import allure
 import pytest
 from playwright.sync_api import expect
 
@@ -35,11 +36,15 @@ def _open_first_product_from_home(page):
     expect(page).to_have_url(re.compile(r".*/product/[^/]+"))
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_open_product_page_from_home_card(page):
     """С главной по первой карточке открывается страница товара."""
     _open_first_product_from_home(page)
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_shows_title(page):
     """Отображается название товара (заголовок)."""
     _open_first_product_from_home(page)
@@ -49,6 +54,8 @@ def test_product_page_shows_title(page):
     expect(title).to_have_text(re.compile(r"\S"))
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_shows_price(page):
     """Отображается цена (с символом ₽)."""
     _open_first_product_from_home(page)
@@ -56,6 +63,8 @@ def test_product_page_shows_price(page):
     expect(page.locator("main")).to_contain_text("₽")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_shows_description_section(page):
     """Отображается блок описания."""
     _open_first_product_from_home(page)
@@ -64,6 +73,8 @@ def test_product_page_shows_description_section(page):
     expect(page.locator("main").get_by_text("Описание товара", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_shows_location(page):
     """Отображается местоположение."""
     _open_first_product_from_home(page)
@@ -72,6 +83,8 @@ def test_product_page_shows_location(page):
     expect(main.get_by_text("Местоположение", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_has_write_button(page):
     """Есть кнопка «Написать»."""
     _open_first_product_from_home(page)
@@ -79,6 +92,8 @@ def test_product_page_has_write_button(page):
     expect(page.get_by_role("button", name="Написать")).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_has_show_phone_button(page):
     """Есть кнопка «Показать номер»."""
     _open_first_product_from_home(page)
@@ -86,6 +101,8 @@ def test_product_page_has_show_phone_button(page):
     expect(page.get_by_role("button", name="Показать номер")).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_has_seller_info_block(page):
     """Есть блок с информацией о продавце."""
     _open_first_product_from_home(page)
@@ -93,6 +110,8 @@ def test_product_page_has_seller_info_block(page):
     expect(page.locator("main").get_by_text("Активен", exact=False)).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_page_seller_other_listings_or_empty_state(page):
     """Список других объявлений продавца или явная пустая подпись."""
     _open_first_product_from_home(page)
@@ -107,6 +126,8 @@ def test_product_page_seller_other_listings_or_empty_state(page):
         expect(empty_state).to_be_visible()
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_show_phone_reveals_number_or_updates_state(page):
     """«Показать номер»: после клика в DOM появляется номер или меняется состояние кнопки."""
     _open_first_product_from_home(page)
@@ -134,6 +155,8 @@ def test_product_show_phone_reveals_number_or_updates_state(page):
     pytest.skip("После клика номер не отобразился и UI не изменился (поведение стенда).")
 
 
+@allure.epic("UI Auction")
+@allure.feature("Product Card")
 def test_product_write_opens_chat_dialog_messages_or_composer(page):
     """«Написать»: открывается чат/модалка, переход в сообщения или поле для текста."""
     _open_first_product_from_home(page)

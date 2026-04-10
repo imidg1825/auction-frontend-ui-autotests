@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 
+import allure
 import pytest
 from playwright.sync_api import Playwright
 
@@ -49,3 +50,30 @@ def guest_page(browser, base_url: str):
     page = context.new_page()
     yield page
     context.close()
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+
+    if report.when == "call" and report.failed:
+        page = item.funcargs.get("page", None)
+        if page:
+            screenshots_dir = Path("screenshots")
+            screenshots_dir.mkdir(exist_ok=True)
+
+            test_name = item.nodeid.replace("::", "_").replace("/", "_")
+            file_path = screenshots_dir / f"{test_name}.png"
+
+            try:
+                page.screenshot(path=str(file_path))
+                with open(file_path, "rb") as image_file:
+                    allure.attach(
+                        image_file.read(),
+                        name="screenshot",
+                        attachment_type=allure.attachment_type.PNG
+                    )
+                print(f"Скриншот сохранён: {file_path}")
+            except Exception as e:
+                print(f"Не удалось сделать скриншот: {e}")

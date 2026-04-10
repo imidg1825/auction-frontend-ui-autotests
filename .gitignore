@@ -16,3 +16,9 @@ auth/state.json
 # прочее
 node_modules/
 *.log
+.playwright/
+allure-report/
+reports/
+screenshots/
+.DS_Store
+Thumbs.db
