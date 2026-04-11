@@ -22,4 +22,6 @@ reports/
 screenshots/
 .DS_Store
 Thumbs.db
-bugs/
+bugs/*
+!bugs/.gitkeep
+!bugs/_bug_template.md
