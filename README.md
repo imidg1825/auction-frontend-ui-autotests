@@ -1,7 +1,7 @@
 # 🎯 UI Autotests — Auction Platform
 
-[![UI TEST REPORT](https://img.shields.io/badge/UI%20TEST%20REPORT-LIVE%20%E2%80%A2%20PAGES-00E676?style=for-the-badge&logo=allure&logoColor=white)](https://imidg1825.github.io/auction-frontend-ui-autotests/)
-[![RUN UI TESTS](https://img.shields.io/badge/RUN%20UI%20TESTS-DISPATCH%20%E2%80%A2%20CI-FF6F00?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/imidg1825/auction-frontend-ui-autotests/actions/workflows/tests.yml)
+[![UI TEST REPORT](https://img.shields.io/badge/-UI%20TEST%20REPORT%20•%20LIVE%20PAGES-00E676?style=for-the-badge&logo=allure&logoColor=white)](https://imidg1825.github.io/auction-frontend-ui-autotests/)
+[![RUN UI TESTS](https://img.shields.io/badge/-RUN%20UI%20TESTS%20•%20DISPATCH%20CI-FF6F00?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/imidg1825/auction-frontend-ui-autotests/actions/workflows/tests.yml)
 
 ### 🚀 Как использовать
 
