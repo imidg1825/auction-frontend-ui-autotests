@@ -6,7 +6,8 @@
     </linearGradient>
   </defs>
   <rect x="0" y="0" rx="30" ry="30" width="260" height="60" fill="url(#grad2)" />
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+  <polygon points="22,18 22,42 46,30" fill="white" aria-hidden="true" />
+  <text x="158" y="30" dominant-baseline="middle" text-anchor="middle"
         font-family="Arial" font-size="16" fill="white" font-weight="bold">
     RUN UI TESTS
   </text>

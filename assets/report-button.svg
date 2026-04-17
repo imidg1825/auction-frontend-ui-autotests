@@ -6,7 +6,13 @@
     </linearGradient>
   </defs>
   <rect x="0" y="0" rx="30" ry="30" width="260" height="60" fill="url(#grad)" />
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+  <g fill="white" aria-hidden="true">
+    <circle cx="30" cy="30" r="5" />
+    <rect x="42" y="34" width="4" height="10" rx="1" />
+    <rect x="49" y="28" width="4" height="16" rx="1" />
+    <rect x="56" y="24" width="4" height="20" rx="1" />
+  </g>
+  <text x="158" y="30" dominant-baseline="middle" text-anchor="middle"
         font-family="Arial" font-size="16" fill="white" font-weight="bold">
     UI TEST REPORT
   </text>

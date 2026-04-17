@@ -15,7 +15,7 @@
 
 <p align="center">
   <a href="https://imidg1825.github.io/auction-frontend-ui-autotests/">
-    <img src="https://raw.githubusercontent.com/imidg1825/auction-frontend-ui-autotests/master/assets/report-button.svg" />
+    <img src="https://raw.githubusercontent.com/imidg1825/auction-frontend-ui-autotests/master/assets/report-button.svg" style="margin-right: 14px;" />
   </a>
   <a href="https://github.com/imidg1825/auction-frontend-ui-autotests/actions/workflows/tests.yml">
     <img src="https://raw.githubusercontent.com/imidg1825/auction-frontend-ui-autotests/master/assets/run-button.svg" />
