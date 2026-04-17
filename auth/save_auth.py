@@ -22,7 +22,8 @@ if not EMAIL or not APP_PASSWORD:
 
 def main():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        headless = True if os.getenv("CI") else False
+        browser = p.chromium.launch(headless=headless)
         context = browser.new_context()
         page = context.new_page()
         page.goto(BASE_URL)
