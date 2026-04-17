@@ -1,5 +1,7 @@
 # 🎯 UI Autotests — Auction Platform
 
+[![UI TEST REPORT](https://img.shields.io/badge/UI%20TEST%20REPORT-online-2ea043?style=for-the-badge&logo=allure&logoColor=white)](https://imidg1825.github.io/auction-frontend-ui-autotests/) [![RUN UI TESTS](https://img.shields.io/badge/RUN%20UI%20TESTS-workflow-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/imidg1825/auction-frontend-ui-autotests/actions/workflows/tests.yml)
+
 Проект может быть использован для внутреннего пользования и тестирования команды Акатосфера.
 
 Автоматизированные UI-тесты для тестового сайта аукциона.
