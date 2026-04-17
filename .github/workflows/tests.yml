@@ -3,8 +3,17 @@ name: UI Tests
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  test:
+  run-tests:
     runs-on: ubuntu-latest
 
     env:
@@ -33,3 +42,36 @@ jobs:
 
       - name: Run tests
         run: pytest -v --alluredir=allure-results
+
+      - name: Set up Java (for Allure CLI)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Allure CLI
+        run: |
+          ALLURE_VERSION=2.29.0
+          wget -q "https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz" -O /tmp/allure.tgz
+          tar -xzf /tmp/allure.tgz -C /tmp
+          echo "/tmp/allure-${ALLURE_VERSION}/bin" >> $GITHUB_PATH
+          allure --version
+
+      - name: Generate Allure report
+        run: allure generate allure-results --clean -o allure-report
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+
+  deploy-pages:
+    needs: run-tests
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
