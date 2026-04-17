@@ -2,6 +2,21 @@
 
 [![UI TEST REPORT](https://img.shields.io/badge/UI%20TEST%20REPORT-online-2ea043?style=for-the-badge&logo=allure&logoColor=white)](https://imidg1825.github.io/auction-frontend-ui-autotests/) [![RUN UI TESTS](https://img.shields.io/badge/RUN%20UI%20TESTS-workflow-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/imidg1825/auction-frontend-ui-autotests/actions/workflows/tests.yml)
 
+### 🚀 Как использовать
+
+**UI TEST REPORT** — ссылка на Allure-отчёт **последнего прогона** в GitHub Pages.
+
+- открывается интерактивный отчёт Allure с актуальными результатами;
+- внутри доступны сводка по прогону, разбиение по разделам (epic / feature / suite) и детали по каждому тесту (шаги, вложения, история).
+
+**RUN UI TESTS** — переход к workflow **UI Tests** в GitHub Actions для ручного запуска полного набора UI-тестов на CI.
+
+1. Нажмите **Run workflow**.
+2. В поле ветки выберите **`master`**.
+3. Подтвердите запуск (**Run workflow**).
+
+⏱ **Время прогона:** ориентировочно **15–18 минут** — это ожидаемо для набора из **~107** UI-сценариев (авторизация, Playwright, генерация Allure и публикация отчёта).
+
 Проект может быть использован для внутреннего пользования и тестирования команды Акатосфера.
 
 Автоматизированные UI-тесты для тестового сайта аукциона.
