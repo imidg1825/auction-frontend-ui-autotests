@@ -1,0 +1,35 @@
+name: UI Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      OTP_EMAIL: ${{ secrets.OTP_EMAIL }}
+      OTP_APP_PASSWORD: ${{ secrets.OTP_APP_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: playwright install --with-deps chromium
+
+      - name: Refresh auth session
+        run: python auth/save_auth.py
+
+      - name: Run tests
+        run: pytest -v --alluredir=allure-results
