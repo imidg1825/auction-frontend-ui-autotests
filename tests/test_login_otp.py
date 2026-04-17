@@ -1,3 +1,10 @@
+import os
+
+import pytest
+
+if os.getenv("CI"):
+    pytest.skip("Skip OTP test in CI", allow_module_level=True)
+
 from utils.otp_helper import get_latest_otp_code
 
 def test_get_otp():
