@@ -15,10 +15,10 @@
 
 <p align="center">
   <a href="https://imidg1825.github.io/auction-frontend-ui-autotests/">
-    <img src="https://img.shields.io/badge/-UI%20TEST%20REPORT%20•%20LIVE%20PAGES-00E676?style=for-the-badge&logo=allure&logoColor=white" />
+    <img src="https://raw.githubusercontent.com/imidg1825/auction-frontend-ui-autotests/master/assets/report-button.svg" />
   </a>
   <a href="https://github.com/imidg1825/auction-frontend-ui-autotests/actions/workflows/tests.yml">
-    <img src="https://img.shields.io/badge/-RUN%20UI%20TESTS%20•%20DISPATCH%20CI-FF6F00?style=for-the-badge&logo=githubactions&logoColor=white" />
+    <img src="https://raw.githubusercontent.com/imidg1825/auction-frontend-ui-autotests/master/assets/run-button.svg" />
   </a>
 </p>
 
