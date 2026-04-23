@@ -70,6 +70,14 @@ jobs:
         if: always()
         run: allure generate allure-results --clean -o allure-report
 
+      - name: Copy bug reports and screenshots to Pages
+        if: always()
+        run: |
+          mkdir -p allure-report/bug-reports
+          mkdir -p allure-report/screenshots
+          cp -r bugs/* allure-report/bug-reports/ || true
+          cp -r screenshots/* allure-report/screenshots/ || true
+
       - name: Upload Pages artifact
         if: always()
         uses: actions/upload-pages-artifact@v3
