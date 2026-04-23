@@ -5,6 +5,7 @@ from typing import Optional
 
 import allure
 import pytest
+from datetime import datetime
 from playwright.sync_api import Playwright
 
 
@@ -59,6 +60,62 @@ def pytest_runtest_makereport(item, call):
 
     if report.when == "call" and report.failed:
         page = item.funcargs.get("page", None)
+
+        bugs_dir = Path("bugs")
+        bugs_dir.mkdir(exist_ok=True)
+
+        safe_name = (
+            item.nodeid.replace("::", "_")
+            .replace("/", "_")
+            .replace("\\", "_")
+            .replace(":", "_")
+        )
+        bug_file_path = bugs_dir / f"{safe_name}.md"
+
+        error_text = getattr(report, "longreprtext", str(report.longrepr))
+
+        page_url = ""
+        if page:
+            try:
+                page_url = page.url
+            except Exception:
+                page_url = ""
+
+        bug_report = f"""# {item.name}
+
+## Источник
+- Тест: {item.nodeid}
+- URL: {page_url or "—"}
+- Время: {datetime.now().isoformat(timespec="seconds")}
+
+## Шаги воспроизведения
+1. Запустить соответствующий тест
+2. Дождаться падения
+3. Сверить фактическое поведение
+
+## Ожидаемый результат
+Сценарий должен выполняться без ошибки.
+
+## Фактический результат
+Тест упал.
+
+## Сообщение об ошибке
+```text
+{error_text}
+```
+"""
+
+        try:
+            bug_file_path.write_text(bug_report, encoding="utf-8")
+        except Exception as e:
+            print(f"Не удалось сохранить bug report: {e}")
+
+        allure.attach(
+            bug_report,
+            name="bug-report",
+            attachment_type=allure.attachment_type.TEXT
+        )
+
         if page:
             screenshots_dir = Path("screenshots")
             screenshots_dir.mkdir(exist_ok=True)
