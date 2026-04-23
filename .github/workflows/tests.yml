@@ -43,6 +43,20 @@ jobs:
       - name: Run tests
         run: pytest -v --alluredir=allure-results
 
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots/
+
+      - name: Upload bug reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bug-reports
+          path: bugs/
+
       - name: Install Allure CLI
         if: always()
         run: |
