@@ -60,6 +60,7 @@ jobs:
           path: allure-report
 
   deploy-pages:
+    if: always()
     needs: run-tests
     runs-on: ubuntu-latest
     environment:
