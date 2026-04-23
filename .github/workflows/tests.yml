@@ -52,9 +52,11 @@ jobs:
           allure --version
 
       - name: Generate Allure report
+        if: always()
         run: allure generate allure-results --clean -o allure-report
 
       - name: Upload Pages artifact
+        if: always()
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report
