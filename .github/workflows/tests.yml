@@ -41,7 +41,7 @@ jobs:
         run: python auth/save_auth.py
 
       - name: Run tests
-        run: pytest -v --alluredir=allure-results
+        run: pytest -v -ra --alluredir=allure-results
 
       - name: Upload screenshots
         if: failure()
