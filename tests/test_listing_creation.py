@@ -71,21 +71,34 @@ def _ensure_location_for_submit(page) -> None:
     loc = page.get_by_label("Местоположение", exact=False)
     if len(loc.input_value().strip()) >= 2:
         return
+
     loc.click()
     loc.fill("Москва")
-    for _ in range(40):
-        page.wait_for_timeout(500)
-        opt = page.get_by_role("option").first
-        if opt.count() > 0 and opt.is_visible():
-            opt.click()
-            page.wait_for_timeout(700)
-            return
+
+    # Вариант 1: доступная разметка autocomplete через role="option"
+    option = page.get_by_role("option").filter(has_text=re.compile("Москва", re.I)).first
+    try:
+        expect(option).to_be_visible(timeout=10_000)
+        option.click()
+        return
+    except AssertionError:
+        pass
+
+    # Вариант 2: fallback для текущей разметки, если options не имеют role="option"
+    suggestion = page.locator("main").get_by_text(re.compile(r"Москва", re.I)).last
+    try:
+        expect(suggestion).to_be_visible(timeout=10_000)
+        suggestion.click()
+        return
+    except AssertionError:
+        pass
+
+    # Вариант 3: клавиатурный выбор, если список открыт, но локаторы нестабильные
     loc.press("ArrowDown")
-    page.wait_for_timeout(400)
     loc.press("Enter")
-    page.wait_for_timeout(600)
-    v = loc.input_value().strip()
-    if len(v) < 2 or ("," not in v and len(v) <= 15):
+
+    value = loc.input_value().strip()
+    if len(value) < 2:
         pytest.skip("Не удалось указать местоположение для размещения.")
 
 
