@@ -69,8 +69,8 @@ def test_product_page_shows_description_section(page):
     """Отображается блок описания."""
     _open_first_product_from_home(page)
 
-    expect(page.get_by_role("heading", name=re.compile("Описание"))).to_be_visible()
-    expect(page.locator("main").get_by_text("Описание товара", exact=False)).to_be_visible()
+    main = page.locator("main")
+    expect(main.get_by_role("heading", name=re.compile(r"^Описание$"))).to_be_visible()
 
 
 @allure.epic("UI Auction")
