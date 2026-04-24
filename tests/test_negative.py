@@ -89,10 +89,10 @@ def _auction_card_link(page):
 
 @allure.epic("UI Auction")
 @allure.feature("Negative Scenarios")
-def test_login_invalid_email_disables_continue_and_shows_hint(page):
+def test_login_invalid_email_disables_continue_and_shows_hint(guest_page):
     """Некорректный e-mail: «Продолжить» неактивна и показывается сообщение о формате."""
-    _open_login_modal(page)
-    dlg = _auth_dialog(page)
+    _open_login_modal(guest_page)
+    dlg = _auth_dialog(guest_page)
     email = dlg.locator('input[type="email"]')
     btn = dlg.get_by_role("button", name="Продолжить")
 
@@ -103,10 +103,10 @@ def test_login_invalid_email_disables_continue_and_shows_hint(page):
 
 @allure.epic("UI Auction")
 @allure.feature("Negative Scenarios")
-def test_login_empty_email_disables_continue(page):
+def test_login_empty_email_disables_continue(guest_page):
     """Пустой e-mail не активирует «Продолжить»."""
-    _open_login_modal(page)
-    dlg = _auth_dialog(page)
+    _open_login_modal(guest_page)
+    dlg = _auth_dialog(guest_page)
     email = dlg.locator('input[type="email"]')
     btn = dlg.get_by_role("button", name="Продолжить")
 
