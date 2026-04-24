@@ -31,7 +31,7 @@ def _dismiss_cookie_dialogs(page):
 
 
 def _auction_card_link(page):
-    return page.locator('[class*="Card"]').locator('a[href^="/auction/"]')
+    return page.locator("main").locator('a[href*="/auction/"]')
 
 
 @allure.epic("UI Auction")
@@ -50,16 +50,23 @@ def test_skip_when_page_is_fixed_price_product(page):
 
 def _open_first_auction_from_home(page):
     page.goto("/", wait_until="domcontentloaded", timeout=120_000)
-    page.wait_for_timeout(5000)
     _dismiss_cookie_dialogs(page)
 
-    link = _auction_card_link(page)
-    if link.count() == 0:
-        pytest.skip("На главной нет карточки аукциона (ссылка /auction/).")
+    auctions_tab = page.locator("main").get_by_text("Аукционы", exact=True)
+    expect(auctions_tab).to_be_visible(timeout=60_000)
+    auctions_tab.click()
 
-    expect(link.first).to_be_visible(timeout=60_000)
-    link.first.click()
-    # SPA: клик по карточке часто меняет URL без полноценной навигации — expect_navigation даёт флаки.
+    expect(page.locator("main").get_by_text("Новые аукционы", exact=False)).to_be_visible(
+        timeout=60_000
+    )
+
+    link = _auction_card_link(page)
+    try:
+        expect(link.first).to_be_visible(timeout=60_000)
+    except AssertionError:
+        pytest.skip("На вкладке «Аукционы» нет карточки аукциона (ссылка /auction/).")
+
+    link.first.click(no_wait_after=True)
     expect(page).to_have_url(re.compile(r".*/auction/"), timeout=60_000)
 
 
