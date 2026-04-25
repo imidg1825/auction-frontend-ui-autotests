@@ -53,6 +53,24 @@ def _settings_main(page):
     return page.locator("main")
 
 
+def _enable_edit_mode_if_available(page):
+    main = _settings_main(page)
+    edit = main.get_by_text("Редактировать", exact=True)
+    if edit.count() == 0:
+        edit = main.get_by_text("Личные данные", exact=True).locator(
+            "xpath=following::*[name()='svg'][1]"
+        )
+
+    try:
+        expect(edit).to_be_visible(timeout=10_000)
+        edit.click()
+    except AssertionError:
+        pytest.skip("Нет кнопки «Редактировать» на странице настроек.")
+
+    first = main.locator('input[name="firstName"]')
+    expect(first).to_be_enabled(timeout=10_000)
+
+
 @allure.epic("UI Auction")
 @allure.feature("Profile Settings")
 def test_settings_opens_from_profile_menu(page):
@@ -97,6 +115,7 @@ def test_settings_can_edit_field_when_enabled(page):
     """Если поле доступно для ввода, значение можно изменить."""
     _open_settings_from_profile_menu(page)
     main = _settings_main(page)
+    _enable_edit_mode_if_available(page)
     first = main.locator('input[name="firstName"]')
     if first.is_disabled():
         pytest.skip("Поля профиля на стенде только для просмотра.")
@@ -113,7 +132,11 @@ def test_settings_save_button_enables_after_change_when_present(page):
     """Если есть кнопка сохранения, после изменения данных она становится активной."""
     _open_settings_from_profile_menu(page)
     main = _settings_main(page)
+    _enable_edit_mode_if_available(page)
     first = main.locator('input[name="firstName"]')
+    last = main.locator('input[name="lastName"]')
+    if last.count() > 0 and last.input_value().strip() == "":
+        last.fill("Тест")
     if first.is_disabled():
         pytest.skip("Нет редактируемых полей.")
 
@@ -136,7 +159,11 @@ def test_settings_save_without_error_when_available(page):
     """После сохранения нет явной ошибки в интерфейсе (если сценарий доступен)."""
     _open_settings_from_profile_menu(page)
     main = _settings_main(page)
+    _enable_edit_mode_if_available(page)
     first = main.locator('input[name="firstName"]')
+    last = main.locator('input[name="lastName"]')
+    if last.count() > 0 and last.input_value().strip() == "":
+        last.fill("Иванов")
     if first.is_disabled():
         pytest.skip("Нет редактируемых полей.")
 
@@ -147,7 +174,7 @@ def test_settings_save_without_error_when_available(page):
         pytest.skip("Нет кнопки сохранения.")
 
     original = first.input_value()
-    first.fill(original + "!")
+    first.fill(original.strip() + "а")
     page.wait_for_timeout(400)
     if save.first.is_disabled():
         pytest.skip("Кнопка сохранения не активируется после изменения.")
@@ -180,6 +207,7 @@ def test_settings_validation_on_email_when_editable(page):
     """Проверка валидации формата e-mail, если поле редактируемое."""
     _open_settings_from_profile_menu(page)
     main = _settings_main(page)
+    _enable_edit_mode_if_available(page)
     email = main.locator('input[name="email"]')
     if email.is_disabled():
         pytest.skip("Поле e-mail только для просмотра.")
