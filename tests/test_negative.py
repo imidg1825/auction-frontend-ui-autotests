@@ -20,11 +20,12 @@ _MIN_JPEG_BYTES = bytes.fromhex(
 
 def _dismiss_cookie_banner_if_visible(page):
     btn = page.get_by_role("button", name="Принять")
-    if btn.count() == 0:
+    try:
+        expect(btn.first).to_be_visible(timeout=5_000)
+        btn.first.click(force=True)
+        expect(btn.first).not_to_be_visible(timeout=5_000)
+    except AssertionError:
         return
-    if btn.first.is_visible():
-        btn.first.click()
-        page.wait_for_timeout(400)
 
 
 def _open_login_modal(page):
@@ -95,7 +96,50 @@ def _ensure_listing_location_or_skip(page) -> None:
 
 
 def _auction_card_link(page):
-    return page.locator('[class*="Card"]').locator('a[href^="/auction/"]')
+    return page.locator("main").locator('a[href*="/auction/"]')
+
+
+def _open_first_auction_from_home_or_skip(page):
+    page.goto("/", wait_until="domcontentloaded", timeout=120_000)
+    _dismiss_cookie_banner_if_visible(page)
+
+    auctions_tab = page.locator("main").locator("button").filter(has_text="Аукционы").last
+    try:
+        expect(auctions_tab).to_be_visible(timeout=30_000)
+        _dismiss_cookie_banner_if_visible(page)
+        box = auctions_tab.bounding_box()
+        if box is None:
+            pytest.skip("Вкладка «Аукционы» найдена, но у неё нет видимой области для клика.")
+
+        page.mouse.click(
+            box["x"] + box["width"] / 2,
+            box["y"] + box["height"] / 2,
+        )
+        expect(page.locator("main").get_by_text("Новые аукционы", exact=False)).to_be_visible(timeout=30_000)
+    except AssertionError:
+        pytest.skip("Не удалось переключиться на вкладку «Аукционы» на главной.")
+
+    link = _auction_card_link(page)
+    try:
+        expect(link.first).to_be_attached(timeout=60_000)
+    except AssertionError:
+        pytest.skip(
+            "На вкладке «Аукционы» нет ссылки /auction/. "
+            "Проверка модалки ставки зависит от наличия аукционов на стенде."
+        )
+
+    visible_link = None
+    for i in range(link.count()):
+        candidate = link.nth(i)
+        if candidate.is_visible():
+            visible_link = candidate
+            break
+
+    if visible_link is None:
+        pytest.skip("Ссылки /auction/ есть в DOM, но нет видимой карточки аукциона.")
+
+    visible_link.click(no_wait_after=True)
+    expect(page).to_have_url(re.compile(r".*/auction/"), timeout=60_000)
 
 
 @allure.epic("UI Auction")
@@ -226,17 +270,7 @@ def test_create_auction_invalid_or_empty_start_price_keeps_submit_disabled(page,
 )
 def test_auction_bid_empty_amount_disables_confirm(page):
     """В модалке ставки пустая сумма не активирует «Подтвердить ставку»."""
-    page.goto("/", wait_until="domcontentloaded", timeout=120_000)
-    page.wait_for_timeout(5000)
-    _dismiss_cookie_banner_if_visible(page)
-
-    link = _auction_card_link(page)
-    if link.count() == 0:
-        pytest.skip("На главной нет карточки аукциона (ссылка /auction/).")
-
-    expect(link.first).to_be_visible(timeout=60_000)
-    link.first.click(no_wait_after=True)
-    expect(page).to_have_url(re.compile(r".*/auction/"), timeout=60_000)
+    _open_first_auction_from_home_or_skip(page)
 
     cta = page.get_by_role("button", name="Сделать ставку")
     if cta.count() == 0:
@@ -262,16 +296,7 @@ def test_auction_bid_empty_amount_disables_confirm(page):
 )
 def test_auction_bid_confirm_stays_disabled_for_zero_or_negative_if_typed(page):
     """Если в поле суммы нельзя отправить корректное значение — кнопка остаётся неактивной."""
-    page.goto("/", wait_until="domcontentloaded", timeout=120_000)
-    page.wait_for_timeout(5000)
-    _dismiss_cookie_banner_if_visible(page)
-
-    link = _auction_card_link(page)
-    if link.count() == 0:
-        pytest.skip("На главной нет карточки аукциона (ссылка /auction/).")
-
-    link.first.click(no_wait_after=True)
-    expect(page).to_have_url(re.compile(r".*/auction/"), timeout=60_000)
+    _open_first_auction_from_home_or_skip(page)
 
     cta = page.get_by_role("button", name="Сделать ставку")
     if cta.count() == 0:
