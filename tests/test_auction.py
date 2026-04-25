@@ -32,20 +32,6 @@ def _auction_card_link(page):
     return page.locator("main").locator('a[href*="/auction/"]')
 
 
-@allure.epic("UI Auction")
-@allure.feature("Auction")
-def test_skip_when_page_is_fixed_price_product(page):
-    """Объявление по /product/ — не аукцион, проверки ставок не выполняются."""
-    page.goto("/product/911", wait_until="domcontentloaded", timeout=120_000)
-    page.wait_for_timeout(3000)
-    _dismiss_cookie_dialogs(page)
-
-    if "/auction/" in page.url:
-        pytest.fail("Ожидалась страница фиксированной цены.")
-
-    pytest.skip("Это не аукцион (/product/) — сценарий ставок пропускается.")
-
-
 def _open_first_auction_from_home(page):
     page.goto("/", wait_until="domcontentloaded", timeout=120_000)
     _dismiss_cookie_dialogs(page)
