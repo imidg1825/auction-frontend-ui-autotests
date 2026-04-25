@@ -19,11 +19,12 @@ _URL_SEARCH_PARAMS = re.compile(r"[?&](searchTitle|q|search|query)=", re.I)
 
 def _dismiss_cookie_banner_if_visible(page):
     btn = page.get_by_role("button", name="Принять")
-    if btn.count() == 0:
+    try:
+        expect(btn.first).to_be_visible(timeout=5_000)
+        btn.first.click(force=True)
+        expect(btn.first).not_to_be_visible(timeout=5_000)
+    except AssertionError:
         return
-    if btn.first.is_visible():
-        btn.first.click()
-        page.wait_for_timeout(500)
 
 
 def _open_home(page):
@@ -240,7 +241,8 @@ def test_filters_change_results_if_present(page):
 
     _expect_listing_cards_min_or_skip(page, 1)
     cards = _listing_cards(page)
-    before = cards.count()
+    before_count = cards.count()
+    before_text = page.locator("main").inner_text()
 
     main = page.locator("main")
     auc_btn = main.get_by_role("button", name="Аукционы")
@@ -250,16 +252,21 @@ def test_filters_change_results_if_present(page):
         pytest.skip("Нет кнопок переключения Объявления/Аукционы на выдаче.")
 
     auc_btn.first.click()
-    page.wait_for_timeout(4000)
-    after_auction = _listing_cards(page).count()
+    expect(auc_btn.first).to_be_visible(timeout=10_000)
+    after_auction_count = _listing_cards(page).count()
+    after_auction_text = page.locator("main").inner_text()
 
     ads_btn.first.click()
-    page.wait_for_timeout(4000)
-    after_ads = _listing_cards(page).count()
+    expect(ads_btn.first).to_be_visible(timeout=10_000)
+    after_ads_count = _listing_cards(page).count()
+    after_ads_text = page.locator("main").inner_text()
 
-    if before == after_auction == after_ads:
+    if (
+        before_count == after_auction_count == after_ads_count
+        and before_text == after_auction_text == after_ads_text
+    ):
         pytest.skip(
-            "Переключение «Объявления»/«Аукционы» не изменило число карточек — на стенде выдача совпадает."
+            "Переключение «Объявления»/«Аукционы» не изменило карточки — на стенде выдача совпадает."
         )
 
 
