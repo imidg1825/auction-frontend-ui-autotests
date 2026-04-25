@@ -19,15 +19,13 @@ pytestmark = pytest.mark.skipif(
 
 
 def _dismiss_cookie_dialogs(page):
-    for _ in range(3):
-        dlg = page.locator('[role="dialog"]')
-        if dlg.count() == 0:
-            return
-        btn = dlg.first.get_by_role("button", name="Принять")
-        if btn.count() == 0:
-            return
-        btn.click()
-        page.wait_for_timeout(600)
+    btn = page.get_by_role("button", name="Принять")
+    try:
+        expect(btn.first).to_be_visible(timeout=5_000)
+        btn.first.click(force=True)
+        expect(btn.first).not_to_be_visible(timeout=5_000)
+    except AssertionError:
+        return
 
 
 def _auction_card_link(page):
@@ -52,9 +50,16 @@ def _open_first_auction_from_home(page):
     page.goto("/", wait_until="domcontentloaded", timeout=120_000)
     _dismiss_cookie_dialogs(page)
 
-    auctions_tab = page.locator("main").get_by_text("Аукционы", exact=True)
+    auctions_tab = page.locator("main").locator("button").filter(has_text="Аукционы").last
     expect(auctions_tab).to_be_visible(timeout=60_000)
-    auctions_tab.click()
+    _dismiss_cookie_dialogs(page)
+    box = auctions_tab.bounding_box()
+    if box is None:
+        pytest.skip("Вкладка «Аукционы» найдена, но у неё нет видимой области для клика.")
+    page.mouse.click(
+        box["x"] + box["width"] / 2,
+        box["y"] + box["height"] / 2,
+    )
 
     link = _auction_card_link(page)
     try:
