@@ -2,6 +2,15 @@ name: UI Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      suite:
+        description: "Test suite to run"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - favorites_rtk_mutations
 
 permissions:
   contents: read
@@ -41,7 +50,12 @@ jobs:
         run: python auth/save_auth.py
 
       - name: Run tests
-        run: pytest -v -ra --alluredir=allure-results
+        run: |
+          if [ "${{ github.event.inputs.suite }}" = "favorites_rtk_mutations" ]; then
+            pytest tests/test_favorites_rtk_mutations.py -v -ra --alluredir=allure-results
+          else
+            pytest -v -ra --alluredir=allure-results
+          fi
 
       - name: Upload screenshots
         if: failure()
